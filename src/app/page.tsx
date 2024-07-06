@@ -1,6 +1,7 @@
-import JobListItem from "@/components/job-list-item";
+import JobFilter from "@/components/job-filter";
+import JobList from "@/components/job-list";
+import Title from "@/components/title";
 import db from "@/lib/prisma";
-import Image from "next/image";
 
 export default async function Home() {
   const jobs = await db.job.findMany({
@@ -11,17 +12,11 @@ export default async function Home() {
   return (
     <main className="max-w-5xl m-auto px-3 my-10 space-y-10 ">
       <div className="space-y-5 text-center">
-        <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
-          Developer Jobs
-        </h1>
+        <Title>Developer Jobs</Title>
         <p className="text-muted-foreground">Find your dream job</p>
       </div>
-      <section>
-        <div className="space-y-4">
-          {jobs.map((job) => (
-            <JobListItem job={job} key={job.id} />
-          ))}
-        </div>
+      <section className="md:max-w-[600px] md:mx-auto lg:max-w-[1200px]">
+        <JobList jobs={jobs} />
       </section>
     </main>
   );

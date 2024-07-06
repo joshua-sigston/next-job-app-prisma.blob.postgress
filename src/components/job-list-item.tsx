@@ -1,3 +1,4 @@
+"use client";
 import { Job } from "@prisma/client";
 import Image from "next/image";
 import React from "react";
@@ -22,6 +23,7 @@ export default function JobListItem({
     createdAt,
   },
 }: Props) {
+  // console.log("jobListItem" + title);
   return (
     <article className="flex gap-3 rounded-sm border p-5 hover:bg-muted/60">
       <Image
