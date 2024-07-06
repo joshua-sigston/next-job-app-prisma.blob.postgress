@@ -15,6 +15,7 @@ interface Props {
 
 async function filterJobs(formData: FormData) {
   "use server";
+  // throw new Error();
 
   const values = Object.fromEntries(formData.entries());
 
