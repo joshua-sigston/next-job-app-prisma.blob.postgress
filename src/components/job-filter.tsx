@@ -2,16 +2,12 @@ import React from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import Select from "./select";
-import { Job } from "@prisma/client";
 import db from "@/lib/prisma";
 import { jobTypes, locationTypes } from "@/lib/job-types";
 import { Button } from "./ui/button";
-import { filtersSchema } from "@/lib/validation";
+import { filtersSchema, JobFilterValues } from "@/lib/validation";
 import { redirect } from "next/navigation";
-
-interface Props {
-  jobs: Job[];
-}
+import SubmitBtn from "./submit-btn";
 
 async function filterJobs(formData: FormData) {
   "use server";
@@ -31,7 +27,11 @@ async function filterJobs(formData: FormData) {
   redirect(`/?${searchParams.toString()}`);
 }
 
-export default async function JobFilter({ jobs }: Props) {
+interface Props {
+  defaultValues: JobFilterValues;
+}
+
+export default async function JobFilter({ defaultValues }: Props) {
   const locations = (await db.job
     .findMany({
       where: { approved: true },
@@ -49,7 +49,12 @@ export default async function JobFilter({ jobs }: Props) {
         <div className="flex flex-col space-y-5">
           <div className="space-y-3">
             <Label htmlFor="query">Search</Label>
-            <Input id="query" name="query" placeholder="Title, company, etc." />
+            <Input
+              id="query"
+              name="query"
+              placeholder="Title, company, etc."
+              defaultValue={defaultValues.query}
+            />
           </div>
           {/* <div className="flex flex-col gap-2">
             <Label htmlFor="locationType">Location Type</Label>
@@ -63,8 +68,8 @@ export default async function JobFilter({ jobs }: Props) {
             </Select>
           </div> */}
           <div className="flex flex-col space-y-3">
-            <Label htmlFor="jobType">Job Type</Label>
-            <Select id="jobType" name="jobType">
+            <Label htmlFor="type">Job Type</Label>
+            <Select id="type" name="type" defaultValue={defaultValues.type}>
               <option value="">All Jobs</option>
               {jobTypes.map((type, index) => (
                 <option key={index} value={type}>
@@ -75,7 +80,11 @@ export default async function JobFilter({ jobs }: Props) {
           </div>
           <div className="flex flex-col space-y-3">
             <Label htmlFor="location">Location</Label>
-            <Select id="location" name="location">
+            <Select
+              id="location"
+              name="location"
+              defaultValue={defaultValues.location}
+            >
               <option value="">All locations</option>
               {locations.map((location, index) => (
                 <option key={index} value={location}>
@@ -85,9 +94,7 @@ export default async function JobFilter({ jobs }: Props) {
             </Select>
           </div>
         </div>
-        <Button type="submit" className="mt-5 w-full">
-          Search
-        </Button>
+        <SubmitBtn className="w-full">Filter Jobs</SubmitBtn>
       </form>
     </aside>
   );
