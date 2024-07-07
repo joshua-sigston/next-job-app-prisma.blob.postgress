@@ -45,7 +45,7 @@ export default async function JobFilter({ defaultValues }: Props) {
 
   return (
     <aside>
-      <form action={filterJobs}>
+      <form action={filterJobs} key={JSON.stringify(defaultValues)}>
         <div className="flex flex-col space-y-5">
           <div className="space-y-3">
             <Label htmlFor="query">Search</Label>
