@@ -94,7 +94,7 @@ export default async function JobFilter({ defaultValues }: Props) {
             </Select>
           </div>
         </div>
-        <SubmitBtn className="w-full">Filter Jobs</SubmitBtn>
+      <div className="mt-3"><SubmitBtn className="w-full">Filter Jobs</SubmitBtn></div>
       </form>
     </aside>
   );
