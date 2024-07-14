@@ -20,6 +20,7 @@ import { Label } from "@/components/ui/label";
 import TextEditor from "@/components/text-editor";
 import { draftToMarkdown } from "markdown-draft-js";
 import LoadingBtn from "@/components/loading-btn";
+import { createJob } from "./actions";
 
 export default function CreateJobForm() {
   const form = useForm<CreateJobValues>({
@@ -37,11 +38,24 @@ export default function CreateJobForm() {
   } = form;
 
   const onSubmit = async (values: CreateJobValues) => {
-    alert(JSON.stringify(values, null, 2));
+    // alert(JSON.stringify(values, null, 2));
+    const formData = new FormData();
+
+    Object.entries(values).forEach(([key, value]) => {
+      if (value) {
+        formData.append(key, value);
+      }
+    });
+
+    try {
+      await createJob(formData);
+    } catch (error) {
+      alert("Something went wrong. Please try again");
+    }
   };
 
   return (
-    <main className="p-5">
+    <main className="mx-auto p-5 md:max-w-[600px]">
       <Form {...form}>
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <FormField
@@ -120,12 +134,16 @@ export default function CreateJobForm() {
               <FormItem>
                 <FormLabel>Location Type</FormLabel>
                 <FormControl>
-                  <Select {...field} defaultValue=""
-                  onChangeCapture={e => {field.onChange(e)
-                    if (e.currentTarget.value === 'Remote') {
-                      trigger('locationType')
-                    }
-                  }}>
+                  <Select
+                    {...field}
+                    defaultValue=""
+                    onChangeCapture={(e) => {
+                      field.onChange(e);
+                      if (e.currentTarget.value === "Remote") {
+                        trigger("locationType");
+                      }
+                    }}
+                  >
                     <option value="" hidden>
                       Select an option
                     </option>
@@ -159,6 +177,7 @@ export default function CreateJobForm() {
                     >
                       <X size={20} />
                     </button>
+                    <span className="text-sm">{watch("location")}</span>
                   </div>
                 )}
                 <FormMessage />
@@ -240,9 +259,11 @@ export default function CreateJobForm() {
               </FormItem>
             )}
           />
-          <LoadingBtn type="submit" loading={isSubmitting}>
-            Submit
-          </LoadingBtn>
+          <div className="mt-5">
+            <LoadingBtn type="submit" className="w-full" loading={isSubmitting}>
+              Submit
+            </LoadingBtn>
+          </div>
         </form>
       </Form>
     </main>

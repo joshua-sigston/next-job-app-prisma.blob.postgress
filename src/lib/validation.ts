@@ -55,6 +55,7 @@ export const createSchema = z
     type: requiredString.refine((value) => jobTypes.includes(value)),
     companyName: requiredString.max(100),
     companyLogo: logoSchema,
+    location: requiredString.max(100),
     description: z.string().max(5000).optional(),
     salary: salarySchema.max(9, "Number can not be longer than 9 digits"),
   })
