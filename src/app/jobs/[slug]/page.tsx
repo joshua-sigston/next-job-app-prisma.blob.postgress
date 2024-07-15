@@ -1,4 +1,5 @@
 import Markdown from "@/components/markdown";
+import { Button } from "@/components/ui/button";
 import db from "@/lib/prisma";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { Briefcase, MapPin, Globe2, Banknote, Clock } from "lucide-react";
@@ -21,6 +22,15 @@ const getJob = cache(async (slug: string) => {
 
   return job;
 });
+
+export async function generateStaticParams() {
+  const jobs = await db.job.findMany({
+    where: { approved: true },
+    select: { slug: true },
+  });
+
+  return jobs.map(({ slug }) => slug);
+}
 
 export async function generateMetaData({
   params: { slug },
@@ -45,6 +55,12 @@ export default async function JobDetails({ params: { slug } }: Props) {
     locationType,
     salary,
   } = await getJob(slug);
+
+  const applicationLink = applicationEmail
+    ? `mailto:${applicationEmail}`
+    : applicationUrl;
+
+  if (!applicationLink) notFound();
 
   return (
     <main className="w-full grow space-y-5 px-5">
@@ -88,6 +104,9 @@ export default async function JobDetails({ params: { slug } }: Props) {
           <p className="flex items-center gap-1.5">
             <Banknote size={16} className="shrink-0" /> {formatCurrency(salary)}
           </p>
+          <Button asChild>
+            <a href={applicationLink}>Apply Now</a>
+          </Button>
         </div>
       </div>
       <div>{description && <Markdown>{description}</Markdown>}</div>
