@@ -1,11 +1,7 @@
-import Markdown from "@/components/markdown";
+import Details from "@/components/job-details";
 import { Button } from "@/components/ui/button";
 import db from "@/lib/prisma";
-import { formatCurrency, formatDate } from "@/lib/utils";
-import { Briefcase, MapPin, Globe2, Banknote, Clock } from "lucide-react";
 import { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import React, { cache } from "react";
 
@@ -43,73 +39,25 @@ export async function generateMetaData({
 }
 
 export default async function JobDetails({ params: { slug } }: Props) {
-  const {
-    title,
-    description,
-    companyLogoUrl,
-    companyName,
-    applicationEmail,
-    applicationUrl,
-    type,
-    location,
-    locationType,
-    salary,
-  } = await getJob(slug);
+  const job = await getJob(slug);
+
+  const { applicationEmail, applicationUrl } = job;
 
   const applicationLink = applicationEmail
     ? `mailto:${applicationEmail}`
     : applicationUrl;
 
-  if (!applicationLink) notFound();
+  if (!applicationLink) {
+    console.error("Job has no application link or email");
+    notFound();
+  }
 
   return (
-    <main className="w-full grow space-y-5 px-5">
-      <div className="flex items-center gap-3">
-        {companyLogoUrl && (
-          <Image
-            src={companyLogoUrl}
-            alt={companyName}
-            width={100}
-            height={100}
-            className="hidden rounded-xl md:block"
-          />
-        )}
-      </div>
-      <div>
-        <div>
-          <h1 className="text-lg font-semibold">{title}</h1>
-          <p className="mb-1 mt-1">
-            {applicationUrl ? (
-              <Link
-                href={new URL(applicationUrl).origin}
-                className="text-green-500"
-              >
-                {companyName}
-              </Link>
-            ) : (
-              <span>{companyName}</span>
-            )}
-          </p>
-        </div>
-        <div>
-          <p className="flex items-center gap-1.5">
-            <Briefcase size={16} className="shrink-0" /> {type}
-          </p>
-          <p className="flex items-center gap-1.5">
-            <MapPin size={16} className="shrink-0" /> {locationType}
-          </p>
-          <p className="flex items-center gap-1.5">
-            <Globe2 size={16} className="shrink-0" /> {location || "worldwide"}
-          </p>
-          <p className="flex items-center gap-1.5">
-            <Banknote size={16} className="shrink-0" /> {formatCurrency(salary)}
-          </p>
-          <Button asChild>
-            <a href={applicationLink}>Apply Now</a>
-          </Button>
-        </div>
-      </div>
-      <div>{description && <Markdown>{description}</Markdown>}</div>
-    </main>
+    <>
+      <Details job={job} />
+      <Button asChild>
+        <a href={applicationLink}>Apply Now</a>
+      </Button>
+    </>
   );
 }
