@@ -3,7 +3,7 @@
 import SubmitBtn from "@/components/submit-btn";
 import { Job } from "@prisma/client";
 import { useFormState } from "react-dom";
-import { approveJob } from "../../actions";
+import { approveJob, deleteJob } from "../../actions";
 
 interface Props {
   job: Job;
@@ -11,8 +11,9 @@ interface Props {
 
 export default function SideBar({ job }: Props) {
   return (
-    <aside className="flex w-[200px] flex-none flex-row items-center gap-2 md:flex-col md:items-stretch">
+    <aside className="flex flex-row items-center justify-around gap-2 md:w-[200px] md:flex-col md:justify-center">
       {job.approved ? <span>Approved</span> : <ApproveBtn jobId={job.id} />}
+      <DeleteBtn jobId={job.id} />
     </aside>
   );
 }
@@ -26,8 +27,20 @@ function ApproveBtn({ jobId }: ButtonProps) {
 
   return (
     <form action={formAction}>
-      <input type="hidden" />
+      <input type="hidden" name="jobId" value={jobId} />
       <SubmitBtn className="bg-green-300">Approve</SubmitBtn>
+      {formState?.error && <p>{formState.error}</p>}
+    </form>
+  );
+}
+
+function DeleteBtn({ jobId }: ButtonProps) {
+  const [formState, formAction] = useFormState(deleteJob, undefined);
+
+  return (
+    <form action={formAction}>
+      <input type="hidden" name="jobId" value={jobId} />
+      <SubmitBtn className="bg-red-500">Delete</SubmitBtn>
       {formState?.error && <p>{formState.error}</p>}
     </form>
   );

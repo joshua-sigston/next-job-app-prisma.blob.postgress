@@ -8,6 +8,7 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 // yXw3UPcrc8KWuWq
@@ -34,11 +35,14 @@ export default function RootLayout({
           </div>
         </div>
       )}
-      <div className="fixed right-[50%] top-5">
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-      </div>
+      {userId && (
+        <div className="fixed top-20 flex w-full max-w-[1200px] justify-around bg-muted py-3">
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+          <Link href="/admin">Dashboard</Link>
+        </div>
+      )}
       {userId && children}
     </ClerkProvider>
   );

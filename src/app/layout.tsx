@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} min-w-[350px]`}
+        className={`${inter.className} mx-auto min-w-[350px] max-w-[1200px]`}
         suppressHydrationWarning={true}
       >
         <Navigation />

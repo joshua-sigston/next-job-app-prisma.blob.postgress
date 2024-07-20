@@ -10,7 +10,7 @@ export default async function AdminPage() {
   });
 
   return (
-    <main className="p-3">
+    <main className="mt-20 p-3">
       <Title className="text-center">Admin Dashboard</Title>
       <section className="mt-5 flex flex-col gap-3">
         <h2 className="text-center text-lg font-bold">Unapproved Jobs</h2>

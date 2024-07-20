@@ -15,7 +15,7 @@ export default async function page({ params: { slug } }: Props) {
 
   if (!job) notFound();
   return (
-    <main>
+    <main className="mx-3 flex max-w-5xl flex-col space-y-3 md:flex-row">
       <Details job={job} />
       <SideBar job={job} />
     </main>
