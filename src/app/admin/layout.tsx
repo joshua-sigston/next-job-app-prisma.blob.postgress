@@ -36,7 +36,7 @@ export default function RootLayout({
         </div>
       )}
       {userId && (
-        <div className="fixed top-20 flex w-full max-w-[1200px] justify-around bg-muted py-3">
+        <div className="flex w-full max-w-[1200px] justify-around bg-muted py-3">
           <SignedIn>
             <UserButton />
           </SignedIn>

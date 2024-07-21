@@ -11,7 +11,7 @@ interface Props {
 
 export default function SideBar({ job }: Props) {
   return (
-    <aside className="flex flex-row items-center justify-around gap-2 md:w-[200px] md:flex-col md:justify-center">
+    <aside className="flex flex-row items-center justify-around p-3 md:w-[200px] md:flex-col md:justify-center">
       {job.approved ? <span>Approved</span> : <ApproveBtn jobId={job.id} />}
       <DeleteBtn jobId={job.id} />
     </aside>
