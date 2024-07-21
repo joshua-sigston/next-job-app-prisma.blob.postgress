@@ -5,9 +5,10 @@ export const filtersSchema = z.object({
   query: z.string().optional(),
   type: z.string().optional(),
   location: z.string().optional(),
-  remote: z.coerce.boolean().optional(),
+  locationType: z.string().optional(),
 });
 
+// create job schemas
 const requiredString = z.string().min(1, "required");
 
 const logoSchema = z

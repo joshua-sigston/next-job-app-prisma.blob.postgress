@@ -15,15 +15,15 @@ async function filterJobs(formData: FormData) {
 
   const values = Object.fromEntries(formData.entries());
 
-  const { query, type, location, remote } = filtersSchema.parse(values);
+  const { query, type, location, locationType } = filtersSchema.parse(values);
 
   const searchParams = new URLSearchParams({
     ...(query && { query: query.trim() }),
     ...(type && { type }),
     ...(location && { location }),
-    ...(remote && { remote: "true" }),
+    ...(locationType && { locationType }),
   });
-  console.log(searchParams);
+  console.log("job-filter component: " + searchParams);
   redirect(`/?${searchParams.toString()}`);
 }
 
@@ -56,7 +56,7 @@ export default async function JobFilter({ defaultValues }: Props) {
               defaultValue={defaultValues.query}
             />
           </div>
-          {/* <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="locationType">Location Type</Label>
             <Select id="locationType" name="locationType">
               <option value="">All Location Types</option>
@@ -66,7 +66,7 @@ export default async function JobFilter({ defaultValues }: Props) {
                 </option>
               ))}
             </Select>
-          </div> */}
+          </div>
           <div className="flex flex-col space-y-3">
             <Label htmlFor="type">Job Type</Label>
             <Select id="type" name="type" defaultValue={defaultValues.type}>
@@ -94,7 +94,9 @@ export default async function JobFilter({ defaultValues }: Props) {
             </Select>
           </div>
         </div>
-      <div className="mt-3"><SubmitBtn className="w-full">Filter Jobs</SubmitBtn></div>
+        <div className="mt-3">
+          <SubmitBtn className="w-full">Filter Jobs</SubmitBtn>
+        </div>
       </form>
     </aside>
   );

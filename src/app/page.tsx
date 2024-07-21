@@ -9,18 +9,19 @@ interface Props {
     query?: string;
     type?: string;
     location?: string;
+    locationType?: string;
     remote?: string;
     page?: string;
   };
 }
 
-function getTitle({ query, type, location, remote }: JobFilterValues) {
+function getTitle({ query, type, location, locationType }: JobFilterValues) {
   const titlePrefix = query
     ? `${query} jobs`
     : type
       ? `${type} developer jobs`
-      : remote
-        ? `${remote} developer jobs`
+      : locationType
+        ? `${locationType} developer jobs`
         : "All developer Jobs";
   const titleSuffix = location ? ` in ${location}` : "";
 
@@ -28,28 +29,28 @@ function getTitle({ query, type, location, remote }: JobFilterValues) {
 }
 
 export function generateMetaData({
-  searchParams: { query, location, type, remote },
+  searchParams: { query, location, type, locationType },
 }: Props): Metadata {
   return {
     title: `${getTitle({
       query,
       location,
       type,
-      remote: remote === "true",
+      locationType,
     })} | Link Jobs`,
   };
 }
 
 export default function Home({
-  searchParams: { query, type, location, remote, page },
+  searchParams: { query, type, location, locationType, page },
 }: Props) {
   const filterValues: JobFilterValues = {
     query,
     location,
     type,
-    remote: remote === "true",
+    locationType,
   };
-  // console.log(filterValues);
+  console.log(filterValues);
 
   return (
     <main className="m-auto my-10 max-w-5xl space-y-10 px-3">
@@ -57,7 +58,7 @@ export default function Home({
         <Title>{getTitle(filterValues)}</Title>
         <p className="text-muted-foreground">Find your dream job</p>
       </div>
-      <section className="md:mx-auto md:max-w-[600px] lg:max-w-[1200px]">
+      <section className="md:mx-auto md:max-w-[600px] lg:max-w-[900px]">
         <JobFilter defaultValues={filterValues} />
         <JobList
           filterValues={filterValues}

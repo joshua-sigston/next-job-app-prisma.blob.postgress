@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default async function JobList({ filterValues, page = 1 }: Props) {
-  const { query, type, location, remote } = filterValues;
+  const { query, type, location, locationType } = filterValues;
   const searchString = query
     ?.split(" ")
     .filter((word) => word.length > 0)
@@ -40,7 +40,7 @@ export default async function JobList({ filterValues, page = 1 }: Props) {
       searchFilter,
       type ? { type } : {},
       location ? { location } : {},
-      remote ? { locationType: "Remote" } : {},
+      locationType ? { locationType } : {},
       { approved: true },
     ],
   };
@@ -57,7 +57,7 @@ export default async function JobList({ filterValues, page = 1 }: Props) {
   const [jobs, count] = await Promise.all([jobsPromise, countPromise]);
 
   return (
-    <div className="mt-10 items-start space-x-5 lg:flex">
+    <div className="mt-10 flex flex-col items-stretch justify-center space-x-5">
       <div className="space-y-4">
         {jobs.map((job) => (
           <Link href={`/jobs/${job.slug}`} key={job.id} className="block">
@@ -88,14 +88,14 @@ interface PaginationProps {
 function Pagination({
   currentPage,
   totalPages,
-  filterValues: { query, type, location, remote },
+  filterValues: { query, type, location, locationType },
 }: PaginationProps) {
   const generatePageLink = (page: number) => {
     const searchParams = new URLSearchParams({
       ...(query && { query }),
       ...(type && { type }),
       ...(location && { location }),
-      ...(remote && { remote: "true" }),
+      ...(locationType && { locationType }),
       page: page.toString(),
     });
 
