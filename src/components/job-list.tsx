@@ -52,9 +52,17 @@ export default async function JobList({ filterValues, page = 1 }: Props) {
     skip,
   });
 
+  const delayPromise = new Promise((resolve, reject) => {
+    setTimeout(resolve, 3000, console.log("fofo"));
+  });
+
   const countPromise = db.job.count({ where });
 
-  const [jobs, count] = await Promise.all([jobsPromise, countPromise]);
+  const [jobs, count, delay] = await Promise.all([
+    jobsPromise,
+    countPromise,
+    delayPromise,
+  ]);
 
   return (
     <div className="mt-10 flex flex-col items-stretch justify-center space-x-5">

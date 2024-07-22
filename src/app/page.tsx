@@ -1,8 +1,10 @@
 import JobFilter from "@/components/job-filter";
 import JobList from "@/components/job-list";
+import LoadingSkeletons from "@/components/loading-skeletons";
 import Title from "@/components/title";
 import { JobFilterValues } from "@/lib/validation";
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 interface Props {
   searchParams: {
@@ -50,7 +52,7 @@ export default function Home({
     type,
     locationType,
   };
-  console.log(filterValues);
+  // console.log(filterValues);
 
   return (
     <main className="m-auto my-10 max-w-5xl space-y-10 px-3">
@@ -60,10 +62,12 @@ export default function Home({
       </div>
       <section className="md:mx-auto md:max-w-[600px] lg:max-w-[900px]">
         <JobFilter defaultValues={filterValues} />
-        <JobList
-          filterValues={filterValues}
-          page={page ? parseInt(page) : undefined}
-        />
+        <Suspense fallback={<LoadingSkeletons />}>
+          <JobList
+            filterValues={filterValues}
+            page={page ? parseInt(page) : undefined}
+          />
+        </Suspense>
       </section>
     </main>
   );

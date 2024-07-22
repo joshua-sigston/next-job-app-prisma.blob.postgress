@@ -1,7 +1,7 @@
 "use client";
 
 import JobListItem from "@/components/job-list-item";
-import { Button } from "@/components/ui/button";
+
 import { Job } from "@prisma/client";
 import Link from "next/link";
 import { useState } from "react";

@@ -9,6 +9,8 @@ import {
 } from "@clerk/nextjs";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
+import LoadingSkeletons from "../../components/loading-skeletons";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 // yXw3UPcrc8KWuWq
@@ -43,7 +45,7 @@ export default function RootLayout({
           <Link href="/admin">Dashboard</Link>
         </div>
       )}
-      {userId && children}
+      <Suspense fallback={<LoadingSkeletons />}>{userId && children}</Suspense>
     </ClerkProvider>
   );
 }
